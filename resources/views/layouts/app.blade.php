@@ -13,81 +13,99 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-            :root {
-                --felt-green: #0b4628;
-                --felt-gradient: radial-gradient(circle, #0e5c35 0%, #0b4628 60%, #041f11 100%);
-                --gold-metallic: linear-gradient(135deg, #fce38a 0%, #f38181 100%);
-                --neon-blue: #00f2ff;
-                --neon-pink: #ff00de;
-                --card-shadow: 0 5px 15px rgba(0,0,0,0.5);
-                --chip-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            }
+    /* === CASINO GRAPHICS ENGINE (DESKTOP DEFAULT) === */
+    :root {
+        --felt-green: #0b4628;
+        --felt-gradient: radial-gradient(circle, #0e5c35 0%, #0b4628 60%, #041f11 100%);
+        --neon-blue: #00f2ff;
+        --card-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    body {
+        background-color: #0f172a !important;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: white;
+        margin: 0; padding: 0; overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    /* THE TABLE (Responsive) */
+    .game-table {
+        background: var(--felt-gradient);
+        border: 15px solid #2d1b0e;
+        border-radius: 30px; /* Reduced radius for mobile */
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        padding: 20px; /* Less padding */
+        min-height: 400px;
+        position: relative;
+        max-width: 100%; /* Ensure it fits screen */
+        width: 95%; /* Leave tiny margins */
+        margin: 10px auto;
+        box-sizing: border-box; /* Crucial for padding calculation */
+    }
+
+    /* 3D PLAYING CARD (Base) */
+    .playing-card {
+        width: 90px; height: 130px; /* Slightly smaller default */
+        background: white; border-radius: 8px;
+        position: relative; display: inline-block;
+        box-shadow: -2px 2px 5px rgba(0,0,0,0.3);
+        margin: 0 4px;
+        transition: transform 0.3s;
+        animation: dealCard 0.5s ease-out forwards;
+    }
+    .card-rank { font-size: 1.2rem; font-weight: bold; position: absolute; top: 4px; left: 6px; color: black; }
+    .card-suit { font-size: 2.5rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .card-red { color: #e11d48; }
+    .card-black { color: #0f172a; }
+
+    /* NEON BUTTONS */
+    .btn-neon {
+        background: rgba(0,0,0,0.3); color: white; border: 2px solid white;
+        padding: 12px 30px; font-size: 1rem; text-transform: uppercase;
+        letter-spacing: 1px; cursor: pointer; border-radius: 8px;
+        transition: 0.2s; width: auto; max-width: 100%;
+    }
+    .btn-neon:hover { background: white; color: black; box-shadow: 0 0 15px var(--neon-blue); }
+
+    .nav-back { color: #94a3b8; text-decoration: none; font-size: 0.9rem; margin-bottom: 15px; display: inline-block; }
+
+    /* === MOBILE RESPONSIVE OVERRIDES === */
+    @media (max-width: 768px) {
+        /* Shrink the Table */
+        .game-table {
+            border-width: 8px; /* Thinner border */
+            padding: 10px;
+            border-radius: 20px;
+        }
+
+        /* Shrink Cards */
+        .playing-card {
+            width: 55px; height: 80px; /* Much smaller cards */
+            margin: 0 2px;
+        }
+        .card-rank { font-size: 0.8rem; top: 2px; left: 4px; }
+        .card-suit { font-size: 1.5rem; }
+
+        /* Shrink Slot Machine Reels */
+        .slot-machine-body { padding: 20px !important; border-width: 3px !important; }
+        .reel-window { padding: 10px !important; gap: 5px !important; }
+        .reel-box { 
+            width: 60px !important; 
+            height: 80px !important; 
+            font-size: 2.5rem !important; 
+        }
+
+        /* Shrink Roulette Wheel */
+        .wheel-container {
+            width: 240px !important; height: 240px !important;
+            border-width: 5px !important;
+        }
         
-            body {
-                background-color: #0f172a !important;
-                font-family: 'Inter', system-ui, sans-serif;
-                color: white;
-            }
-        
-            /* THE TABLE (Realistic Felt) */
-            .game-table {
-                background: var(--felt-gradient);
-                border: 15px solid #2d1b0e; /* Wood border */
-                border-radius: 50px;
-                box-shadow: inset 0 0 100px rgba(0,0,0,0.8), 0 20px 50px rgba(0,0,0,0.5);
-                padding: 40px;
-                min-height: 500px;
-                position: relative;
-                max-width: 1000px;
-                margin: 20px auto;
-                border-bottom: 15px solid #1a0f08; /* 3D depth */
-            }
-        
-            /* 3D PLAYING CARD */
-            .playing-card {
-                width: 100px; height: 140px;
-                background: white;
-                border-radius: 10px;
-                position: relative;
-                display: inline-block;
-                box-shadow: -5px 5px 10px rgba(0,0,0,0.3);
-                margin: 0 5px;
-                transition: transform 0.3s;
-                animation: dealCard 0.5s ease-out forwards;
-            }
-            .playing-card:hover { transform: translateY(-10px) rotate(2deg); z-index: 10; }
-            .card-rank { font-size: 1.5rem; font-weight: bold; position: absolute; top: 5px; left: 8px; color: black; }
-            .card-suit { font-size: 3rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-            .card-red { color: #e11d48; }
-            .card-black { color: #0f172a; }
-            
-            @keyframes dealCard { from { opacity: 0; transform: translateY(-100px) scale(0.5); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        
-            /* NEON BUTTONS */
-            .btn-neon {
-                background: transparent;
-                color: white;
-                border: 2px solid white;
-                padding: 15px 40px;
-                font-size: 1.2rem;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                cursor: pointer;
-                position: relative;
-                overflow: hidden;
-                transition: 0.3s;
-                box-shadow: 0 0 10px rgba(255,255,255,0.1);
-            }
-            .btn-neon:hover {
-                background: white; color: black;
-                box-shadow: 0 0 20px white, 0 0 40px var(--neon-blue);
-            }
-            
-            /* UTILS */
-            .text-glow { text-shadow: 0 0 10px rgba(255,255,255,0.8); }
-            .nav-back { color: rgba(255,255,255,0.5); text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
-            .nav-back:hover { color: white; }
-        </style>
+        /* Adjust Font Sizes */
+        h1 { font-size: 2rem !important; }
+        .btn-neon { padding: 10px 20px; font-size: 0.9rem; }
+    }
+</style>
 
     </head>
     <body class="font-sans antialiased">
